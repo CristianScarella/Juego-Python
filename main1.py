@@ -81,7 +81,7 @@ while True:
 
     ventana.blit(piso, (x_rel_Piso-piso.get_rect().width, 500))
     if(x_rel_Piso<ANCHO):
-        ventana.blit(piso,(x_rel_Piso,500))
+        ventana.blit(piso,(x_rel_Piso,500)) #Mostramos la imagen
     xPiso-=5   #Calcula la velocidad mientras el numero sea mas alto mas rapido ira el movimiento de la imagen
     # xPiso es la cantidad de pixeles por segundo
     #-----------------------------FinPiso-------------------------------------------
