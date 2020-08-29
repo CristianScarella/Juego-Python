@@ -1,0 +1,16 @@
+-  REPOSITORIO DEL JUEGO BASE: https://github.com/shivamshekhar/Chrome-T-Rex-Rush/
+
+- COMO PROGRAMAR LOS SPRITES: https://www.youtube.com/watch?v=h5hW3ynHvhM&t=278s
+
+- COMO HACER SALTAR A LA MOTO: https://www.youtube.com/watch?v=ddxSjCXhN9g
+
+- COMO CONSTRUIR UN MAPA: https://www.youtube.com/watch?v=42HL59zlLwY&list=PLh7JzoyIyU4IoslNDwae2KSgCyCtsw1ka&index=23
+
+- COMO HACER VARIOS MAPAS DISTINTOS Y CAMBIARLOS: https://www.youtube.com/watch?v=AZysxbZgjZM&list=PLh7JzoyIyU4IoslNDwae2KSgCyCtsw1ka&index=26
+
+- CONCEPTOS BASICOS DE PYGAME CON EJEMPLOS DE CODIGO: http://programarcadegames.com/index.php?lang=es  
+
+- CURSO DE PYGAMES: 
+
+   Codigo facilito curso: https://www.youtube.com/watch?v=xtk5lR150fg&list=PLpOqH6AE0tNherBf6bzGiDM1uIy_E0WJH&index=2
+   Juego en Pygame desde cero: https://www.youtube.com/playlist?list=PLh7JzoyIyU4IoslNDwae2KSgCyCtsw1ka
