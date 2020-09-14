@@ -98,7 +98,8 @@ class OptionsMenu(Menu):
         self.state = 'Volume'
         self.volx, self.voly = self.mitad_ancho, self.mitad_alto + 20
         self.controlsx, self.controlsy = self.mitad_ancho, self.mitad_alto + 40
-        self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
+        self.cursor_rect.midtop = (self.volx + self.offset, self.voly)  #dibujamos el cursor de la izquierda
+        self.cursor_rectDer.midtop = (self.volx + self.offder, self.voly)   #dibujamos el cursor de la derecha
 
     def display_menu(self):
         self.correr_pantalla = True
@@ -120,9 +121,11 @@ class OptionsMenu(Menu):
             if self.state == 'Volume':
                 self.state = 'Controls'
                 self.cursor_rect.midtop = (self.controlsx + self.offset, self.controlsy)
+                self.cursor_rectDer.midtop = (self.controlsx + self.offder, self.controlsy)
             elif self.state == 'Controls':
                 self.state = 'Volume'
                 self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
+                self.cursor_rectDer.midtop = (self.volx + self.offder, self.voly)
         elif self.game.START_KEY:
             # TO-DO: Create a Volume Menu and a Controls Menu
             # falta crear el menu de volumen y mostrar los controles
