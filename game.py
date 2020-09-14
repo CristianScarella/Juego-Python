@@ -7,6 +7,10 @@ from menu import *
 class Game():
     def __init__(self):
         #pygame.init()
+        pygame.init()
+        self.ANCHO,self.LARGO=1280,720
+        self.pantalla = pygame.Surface((self.ANCHO,self.LARGO))
+        self.ventana=pygame.display.set_mode((self.ANCHO,self.LARGO))
         self.funcionando, self.jugando = True, False
         self.Color,self.Verde,self.Gris,self.Amarillo,self.Azul,self.Blanco,self.Negro=(70,80,150),(0, 255, 126),(165, 172, 171),(243, 254, 0),(0, 51, 254),(255, 255, 255),(0,0,0)
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY,self.P_KEY = False,False, False, False, False, False
@@ -43,13 +47,11 @@ class Game():
         self.iteradorObstaculo=0
         self.cambiarObstaculo=0
         self.contadorObstaculo=0
+        self.acelerando =[]
+        self.Moto_sprite = pygame.image.load("Imagenes/Moto.png")
         
         
         
-    pygame.init()
-    ANCHO,LARGO=1280,720
-    pantalla = pygame.Surface((ANCHO,LARGO))
-    ventana=pygame.display.set_mode((ANCHO,LARGO))
 
     # tuve que cambiarlo del init porque sino, no me toma el sprite de la moto .convert_alpha()
     
@@ -57,6 +59,7 @@ class Game():
     #Videos para hacer el fondo y el piso movil https://www.youtube.com/watch?v=Ftln3VrFV6s&list=PLVzwufPir356RMxSsOccc38jmxfxqfBdp&index=4   
 
     def loop_juego(self):
+        self.acelerar()
         while self.jugando:
             
             self.comprobar_evento()
@@ -295,20 +298,17 @@ class Game():
     
     
     #Cargamos el sprite de moto
-    Moto_sprite = pygame.image.load("Imagenes/Moto.png").convert_alpha()
+    #Moto_sprite = pygame.image.load("Imagenes/Moto.png").convert_alpha()
 
-    def recorte_imagen (a,b,c,d,imagen):
+    def recorte_imagen (self,a,b,c,d):
         
-        Moto_sprite=imagen.convert_alpha()
+        self.Moto_sprite=self.Moto_sprite.convert_alpha()
         #Moto_sprite = pygame.image.load("Imagenes/Personaje_Sprite.png").convert_alpha()  #Cargamos la imagen con los movimientos
-        Moto_sprite.set_clip(pygame.Rect(a,b,c,d))  
-        Moto_1 = Moto_sprite.subsurface(Moto_sprite.get_clip())
+        self.Moto_sprite.set_clip(pygame.Rect(a,b,c,d))  
+        Moto_1 = self.Moto_sprite.subsurface(self.Moto_sprite.get_clip())
         Ancho_moto = Moto_1.get_size()
         MotoBig = pygame.transform.scale(Moto_1,(int(Ancho_moto[0]*2),(Ancho_moto[1]*2)))
         return MotoBig
     
-    acelerando = [recorte_imagen(0,115,106,62,Moto_sprite),
-               recorte_imagen(106,115,105,57,Moto_sprite),
-               recorte_imagen(213,115,105,57,Moto_sprite),
-               recorte_imagen(318,115,105,57,Moto_sprite)  
-        ]
+    def acelerar(self):
+         self.acelerando = [self.recorte_imagen(0,115,106,62),self.recorte_imagen(106,115,105,57),self.recorte_imagen(213,115,105,57),self.recorte_imagen(318,115,105,57)  ]
