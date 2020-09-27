@@ -7,6 +7,10 @@ from menu import *
 class Game():
     def __init__(self):
         #pygame.init()
+        self.reiniciar_juego()
+        
+        
+    def reiniciar_juego(self):
         self.funcionando, self.jugando = True, False
         self.Color,self.Verde,self.Gris,self.Amarillo,self.Azul,self.Blanco,self.Negro=(70,80,150),(0, 255, 126),(165, 172, 171),(243, 254, 0),(0, 51, 254),(255, 255, 255),(0,0,0)
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY,self.P_KEY = False,False, False, False, False, False
@@ -36,14 +40,16 @@ class Game():
         self.contadorVelocidad =0
         self.puntos=0
         self.cuentaSalto = 13
-        self.px=0
+        self.px = 0
         self.py=500
         self.tam_fuente_puntos=25
         self.pausa=False
         self.iteradorObstaculo=0
         self.cambiarObstaculo=0
         self.contadorObstaculo=0
-        
+        self.acelerando = []
+        self.Moto_sprite = pygame.image.load("Imagenes/Moto.png")  
+        self.perder=False
         
         
     pygame.init()
@@ -57,19 +63,27 @@ class Game():
     #Videos para hacer el fondo y el piso movil https://www.youtube.com/watch?v=Ftln3VrFV6s&list=PLVzwufPir356RMxSsOccc38jmxfxqfBdp&index=4   
 
     def loop_juego(self):
+        if(self.jugando):
+            self.mute()
+            pygame.mixer.music.set_volume(0.1)
+            pygame.mixer.music.load('Sonidos/juego.mp3')
+            pygame.mixer.music.play(1)
+
         while self.jugando:
             
             self.comprobar_evento()
             if self.ESCAPE_KEY:  #si apretamos enter el juego vuelve al menu
                 self.jugando= False
-            elif self.P_KEY:
-                self.pausar()
+            elif self.P_KEY:    # si apretamos la "p" muestra el carter de pausa
+                self.mute() #muteamos la cancion 
+                self.pausar()  #mostramos mensaje de pausa
+                self.unmute()  #volvemos a escuchar la cancion
+            
+
                 
 
             #Opción tecla pulsada
             keys = pygame.key.get_pressed()
-
-
 
             
 
@@ -88,6 +102,7 @@ class Game():
                 if self.cuentaSalto >= -13:
                     self.py -= (self.cuentaSalto * abs(self.cuentaSalto)) * 0.2
                     self.cuentaSalto -= 1
+                   
                 else:
                     self.cuentaSalto = 13
                     self.salto = False
@@ -101,6 +116,9 @@ class Game():
             self.obstaculo()
             self.movimiento_moto()
             self.puntuacion()
+            self.colisiones()
+            #self.ventana.blit(self.Marcador,(self.xobstaculo,self.yobstaculo))
+            
 
 
             self.contadorVelocidad +=1
@@ -113,7 +131,7 @@ class Game():
             
             if(self.contadorVelocidad %100==0): #estaba en 200, que cambia??
                 self.puntos+=1
-                self.cambiarObstaculo= 1
+                #self.cambiarObstaculo= 1
             if self.contadorObstaculo>400:
                 self.cambiarObstaculo= 0
                 self.contadorObstaculo=0
@@ -126,7 +144,12 @@ class Game():
             self.reiniciar_tecla()
             pygame.display.update()
             self.reloj.tick(self.FPS)
-            
+    
+    def mute(self):
+        pygame.mixer.music.pause()
+    
+    def unmute(self):
+        pygame.mixer.music.unpause()
 
     def reiniciar_tecla(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESCAPE_KEY,self.P_KEY = False,False,False, False, False, False
@@ -164,8 +187,9 @@ class Game():
                     if event.key == pygame.K_p:
                         self.pausa=False
             fuente=pygame.font.Font(self.fuente_Puntuacion,self.tam_fuente_puntos)
-            texto_de_puntos=fuente.render("PAUSA",True,self.Blanco)
-            self.ventana.blit(texto_de_puntos,(self.ANCHO/2,self.LARGO/2))
+            pygame.draw.rect(self.ventana,self.Negro, pygame.Rect((635,350, 135, 50)),0)
+            texto_de_pausa=fuente.render("PAUSA",True,self.Blanco)
+            self.ventana.blit(texto_de_pausa,(self.ANCHO/2,self.LARGO/2))
             pygame.display.update()
             
             
@@ -246,6 +270,44 @@ class Game():
                 self.resta +=0.5  #En cuanto queres que se incremente cada vez que vuelva a aparecer de vuelta el obstaculo
 
 
+    def colisiones (self):
+     
+       if self.xobstaculo >5 and self.xobstaculo <180 and self.py>480 and self.py<501: # and self.py>499 and self.py<1000
+            self.perder=True
+            while self.perder:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_p:
+                            self.perder=False
+                            self.reiniciar_juego()
+                            
+                            
+                fuentePerder=pygame.font.Font(self.fuente_Puntuacion,self.tam_fuente_puntos)
+
+                
+                
+                
+                
+                # dibuja el rectángulo
+                pygame.draw.rect(self.ventana,self.Negro, pygame.Rect((590,350, 200, 50)),0)    #pygame.Rect (x,y,ancho,alto) dibujar un rectangulo
+                pygame.draw.rect(self.ventana,self.Negro, pygame.Rect((515,500, 350, 70)),0)
+                texto_de_pausa=fuentePerder.render("Perdiste",True,self.Blanco)
+                texto_de_pausa_2 = fuentePerder.render("Presiona P para",True,self.Blanco)
+                texto_de_pausa_3 = fuentePerder.render("*REINTENTAR*",True,self.Blanco)
+                self.ventana.blit(texto_de_pausa,(600,360))
+                self.ventana.blit(texto_de_pausa_2,(520,500))
+                self.ventana.blit(texto_de_pausa_3,(560,540))
+                pygame.display.update()
+                #pygame.quit()
+                #sys.exit()
+            self.reiniciar_juego()     
+
+
+
+
 
     def draw_text(self, text, size, x, y ):
         font = pygame.font.Font(self.fuente_Puntuacion,size)
@@ -255,6 +317,17 @@ class Game():
         self.pantalla.blit(text_surface,text_rect)
 
 
+    
+    def recorte_imagen (self,a,b,c,d,imagen):
+
+
+        self.Moto_sprite.set_clip(pygame.Rect(a,b,c,d))  
+        Moto_1 = self.Moto_sprite.subsurface(self.Moto_sprite.get_clip())
+        Ancho_moto = Moto_1.get_size()
+        MotoBig = pygame.transform.scale(Moto_1,(int(Ancho_moto[0]*2),(Ancho_moto[1]*2)))
+        return MotoBig
+    
+    
 
 
     def puntuacion(self):
@@ -273,6 +346,17 @@ class Game():
         #global cuentaPasos
         global x
 
+        #global Moto_sprite = pygame.image.load("Imagenes/Moto.png")
+
+        self.acelerando = [
+                            self.recorte_imagen(0,115,106,62,self.Moto_sprite),
+                            self.recorte_imagen(106,115,105,57,self.Moto_sprite),
+                            self.recorte_imagen(213,115,105,57,self.Moto_sprite),
+                            self.recorte_imagen(318,115,105,57,self.Moto_sprite)  
+                    ]
+
+
+        
         #Estos if anidados definen segun la tecla que se aprete las imagenes que se tiene que mostrar
 
         #Contador de pasos
@@ -294,21 +378,4 @@ class Game():
 
     
     
-    #Cargamos el sprite de moto
-    Moto_sprite = pygame.image.load("Imagenes/Moto.png").convert_alpha()
-
-    def recorte_imagen (a,b,c,d,imagen):
-        
-        Moto_sprite=imagen.convert_alpha()
-        #Moto_sprite = pygame.image.load("Imagenes/Personaje_Sprite.png").convert_alpha()  #Cargamos la imagen con los movimientos
-        Moto_sprite.set_clip(pygame.Rect(a,b,c,d))  
-        Moto_1 = Moto_sprite.subsurface(Moto_sprite.get_clip())
-        Ancho_moto = Moto_1.get_size()
-        MotoBig = pygame.transform.scale(Moto_1,(int(Ancho_moto[0]*2),(Ancho_moto[1]*2)))
-        return MotoBig
     
-    acelerando = [recorte_imagen(0,115,106,62,Moto_sprite),
-               recorte_imagen(106,115,105,57,Moto_sprite),
-               recorte_imagen(213,115,105,57,Moto_sprite),
-               recorte_imagen(318,115,105,57,Moto_sprite)  
-        ]

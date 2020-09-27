@@ -7,8 +7,9 @@ class Menu():
         self.correr_pantalla = True
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
         self.cursor_rectDer = pygame.Rect(0, 0, 20, 20)
-        self.offset = -100 #aca es un atributo fijo,lo llamamos cuando dibujamos el asterisco para que este -100 pixeles del texto del menu
-        self.offder = 118
+        self.offset = -130 #aca es un atributo fijo,lo llamamos cuando dibujamos el asterisco para que este -100 pixeles del texto del menu
+        self.offder = 150
+        
     def draw_cursor(self):
         self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y)
         self.game.draw_text('*', 15, self.cursor_rectDer.x, self.cursor_rectDer.y)
@@ -30,13 +31,16 @@ class MainMenu(Menu):
         self.cursor_rectDer.midtop = (self.startx + self.offder,self.starty) #dibujamos el asterisco de la izquierda
     def display_menu(self):
         self.correr_pantalla = True
+        pygame.mixer.music.load('Sonidos/pokemon.mp3')
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer.music.play(1)
         while self.correr_pantalla:
             self.game.comprobar_evento()    #comprobamos si se presiono una tecla o la x de la ventana para salir
             self.check_input()
             self.game.pantalla.fill(self.game.Negro)
             self.game.draw_text('Menu principal', 20, self.game.ANCHO / 2, self.game.LARGO / 2 - 20)
-            self.game.draw_text("Start Game", 20, self.startx, self.starty)
-            self.game.draw_text("Optiones", 20, self.opcionesx, self.opcionesy)
+            self.game.draw_text("Iniciar Partida", 20, self.startx, self.starty)
+            self.game.draw_text("Opciones", 20, self.opcionesx, self.opcionesy)
             self.game.draw_text("Creditos", 20, self.creditsx, self.creditsy)
             self.game.draw_text("Salir", 20, self.salirx, self.saliry)
             self.draw_cursor()
@@ -144,10 +148,10 @@ class CreditsMenu(Menu):
                 self.correr_pantalla = False    # seteamos la variable para salir del bucle
             self.game.pantalla.fill(self.game.Negro)   # Establecemos de color negro la pantalla
             self.game.draw_text('Creditos', 20, self.game.ANCHO / 2, self.game.LARGO / 2 - 20)  #mostramos el titulo del menu
-            self.game.draw_text('Persona 1', 15, self.game.ANCHO / 2 -4, self.game.LARGO / 2 + 10) #mostramos la persona
-            self.game.draw_text('Persona 2', 15, self.game.ANCHO / 2, self.game.LARGO / 2 + 30) #mostramos la persona 
-            self.game.draw_text('Persona 3', 15, self.game.ANCHO / 2, self.game.LARGO / 2 + 50) #mostramos la persona
-            self.game.draw_text('Persona 4', 15, self.game.ANCHO / 2, self.game.LARGO / 2 + 70) #mostramos la persona
+            self.game.draw_text('Alan Signetti', 15, self.game.ANCHO / 2 -4, self.game.LARGO / 2 + 10) #mostramos la persona
+            self.game.draw_text('Cristian Scarella', 15, self.game.ANCHO / 2, self.game.LARGO / 2 + 30) #mostramos la persona 
+            self.game.draw_text('Yago Rexach', 15, self.game.ANCHO / 2, self.game.LARGO / 2 + 50) #mostramos la persona
+            self.game.draw_text('Fernando Scroppo', 15, self.game.ANCHO / 2, self.game.LARGO / 2 + 70) #mostramos la persona
 
             self.blit_screen()
 
